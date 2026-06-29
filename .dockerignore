@@ -1,0 +1,13 @@
+.git
+.gitignore
+.venv
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.python-version
+.codex
+.agents
+.DS_Store
+uv.lock
+mise.toml

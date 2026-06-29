@@ -1,0 +1,27 @@
+[project]
+name = "the-lab-zone-slack-bot"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "aiohttp>=3.12.13",
+    "prometheus-client>=0.25.0",
+    "pydantic-ai>=2.1.0",
+    "pydantic-settings>=2.14.2",
+    "slack-bolt>=1.28.0",
+]
+
+
+[project.scripts]
+slack-bot = "main:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+py-modules = ["main", "agent", "config", "metrics", "log"]
+
+[tool.setuptools.packages.find]
+include = ["bot"]
