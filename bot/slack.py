@@ -15,7 +15,14 @@ logger = logging.getLogger("slack_qa_bot.bridge")
 
 settings = get_settings()
 
-app = AsyncApp(token=settings.slack_bot_token.get_secret_value())
+app = AsyncApp(
+    token=settings.slack_bot_token.get_secret_value(),
+    # Socket Mode nao usa verificacao de assinatura HTTP (nao ha signing_secret).
+    # Sem isso, o bolt instancia o middleware de request verification e estoura
+    # com "signing_secret must not be empty".
+    signing_secret="",
+    request_verification_enabled=False,
+)
 
 message_parser = SlackMessageParser()
 history_builder = SlackHistoryBuilder()

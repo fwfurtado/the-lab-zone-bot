@@ -12,4 +12,8 @@ COPY agent.py config.py log.py main.py metrics.py ./
 
 RUN pip install .
 
+# cria um usuário não-root e passa a rodar como ele
+RUN useradd --uid 10001 --create-home --shell /usr/sbin/nologin appuser
+USER 10001
+
 CMD ["slack-bot"]

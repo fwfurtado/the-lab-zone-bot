@@ -1,3 +1,4 @@
+repository := "ofwfurtado"
 image := "the-lab-zone-slack-bot"
 tag := "latest"
 
@@ -5,7 +6,7 @@ default:
     @just --list
 
 build:
-    docker build -t {{image}}:{{tag}} .
+    docker build -t {{repository}}/{{image}}:{{tag}} .
 
-build-tag image_name tag_name:
-    docker build -t {{image_name}}:{{tag_name}} .
+build-tag tag_name:
+    docker build -t {{repository}}/{{image}}:{{tag_name}} .
