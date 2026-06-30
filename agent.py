@@ -59,14 +59,14 @@ async def answer(
             result = await agent.run(question, message_history=message_history)
             return result.output
 
-        async with agent.run_stream(
+        async with agent.iter(
             question,
             message_history=message_history,
-        ) as stream:
-            emitted = 0
-            async for full_text in stream.stream_text():
-                delta = full_text[emitted:]
-                if delta:
-                    await on_delta(delta)
-                    emitted = len(full_text)
-            return await stream.get_output()
+        ) as run:
+            async for node in run:
+                if agent.is_model_request_node(node):
+                    async with node.stream(run.ctx) as stream:
+                        async for delta in stream.stream_text(delta=True):
+                            if delta:
+                                await on_delta(delta)
+            return run.result.output if run.result else ""
