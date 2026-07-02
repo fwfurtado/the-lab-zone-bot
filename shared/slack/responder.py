@@ -4,7 +4,7 @@ from typing import Any
 from shared.slack.history import SlackHistoryBuilder
 from shared.slack.message_parser import SlackMessageParser
 from shared.slack.message_updater import SlackMessageUpdater
-from shared.slack.types import AnswerFn
+from shared.types import AnswerFn
 from shared.metrics import answer_errors_total, answer_latency, questions_total
 
 

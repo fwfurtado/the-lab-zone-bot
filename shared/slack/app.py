@@ -9,7 +9,7 @@ from shared.config import get_settings
 from shared.slack.history import SlackHistoryBuilder
 from shared.slack.message_parser import SlackMessageParser
 from shared.slack.responder import SlackResponder
-from shared.slack.types import AnswerFn
+from shared.types import AnswerFn
 
 
 async def start_bot(
@@ -19,17 +19,23 @@ async def start_bot(
 ) -> None:
     """Sobe a ponte Slack (Socket Mode) para um agente.
 
-    A ponte é I/O puro e agnóstica ao agente: recebe o `answer_fn` (contrato
-    shared.slack.types.AnswerFn) e não conhece a implementação concreta. Assim
-    QA e triagem compartilham esta mesma ponte, diferindo só no agente/prompt.
-    Cada bot roda no seu próprio processo/deployment, com seu próprio Slack App
-    (tokens via env), então o `app` é construído por-processo aqui.
+    Ponte I/O pura e agnóstica ao agente: recebe o `answer_fn` (contrato
+    shared.types.AnswerFn) e não conhece a implementação concreta. Só o modo
+    bot exige os tokens do Slack — por isso são opcionais no config e validados
+    aqui, na fronteira que de fato os usa.
     """
     settings = get_settings()
     logger = logging.getLogger(logger_name)
 
+    bot_token = settings.slack_bot_token
+    app_token = settings.slack_app_token
+    if bot_token is None or app_token is None:
+        raise RuntimeError(
+            "SLACK_BOT_TOKEN e SLACK_APP_TOKEN são obrigatórios para o modo bot."
+        )
+
     app = AsyncApp(
-        token=settings.slack_bot_token.get_secret_value(),
+        token=bot_token.get_secret_value(),
         # Socket Mode nao usa verificacao de assinatura HTTP (nao ha signing_secret).
         # Sem isso, o bolt instancia o middleware de request verification e estoura
         # com "signing_secret must not be empty".
@@ -75,10 +81,7 @@ async def start_bot(
             return
         await _respond(event, client, say)
 
-    handler = AsyncSocketModeHandler(
-        app,
-        settings.slack_app_token.get_secret_value(),
-    )
+    handler = AsyncSocketModeHandler(app, app_token.get_secret_value())
 
     logger.info("starting the-lab-zone bot socket...")
 

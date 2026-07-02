@@ -2152,7 +2152,7 @@ wheels = [
 ]
 
 [[package]]
-name = "the-lab-zone-slack-bot"
+name = "the-lab-zone-agents"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [

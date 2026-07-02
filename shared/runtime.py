@@ -8,7 +8,7 @@ from pydantic_ai.models.openai import OpenAIChatModel
 from pydantic_ai.providers.openai import OpenAIProvider
 
 from shared.config import get_settings
-from shared.slack.types import OnDelta
+from shared.types import OnDelta
 
 logger = logging.getLogger("the_lab_zone.runtime")
 

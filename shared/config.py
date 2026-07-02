@@ -14,8 +14,10 @@ class Settings(BaseSettings):
         extra="ignore",
     )
 
-    slack_bot_token: SecretStr = Field(alias="SLACK_BOT_TOKEN")
-    slack_app_token: SecretStr = Field(alias="SLACK_APP_TOKEN")
+    # Opcionais: só o modo bot (QA) precisa. A CLI de triagem não fala com o
+    # Slack, então não deve exigir esses tokens. start_bot valida a presença.
+    slack_bot_token: SecretStr | None = Field(default=None, alias="SLACK_BOT_TOKEN")
+    slack_app_token: SecretStr | None = Field(default=None, alias="SLACK_APP_TOKEN")
 
     litellm_base_url: str = Field(
         default="http://litellm.ai.svc.cluster.local:4000/v1",

@@ -16,7 +16,8 @@ RUN pip install .
 RUN useradd --uid 10001 --create-home --shell /usr/sbin/nologin appuser
 USER 10001
 
-# Uma imagem, dois entrypoints. O deployment escolhe:
-#   command: ["qa-bot"]  ou  command: ["triage-bot"]
+# Dois entrypoints numa imagem:
+#   qa-bot  -> bot Slack (long-running; Deployment com command: ["qa-bot"])
+#   triage  -> CLI de triagem (one-shot; recebe contexto por arg/stdin)
 # Os prompts viajam como package-data; SYSTEM_PROMPT_PATH pode sobrescrever.
 CMD ["qa-bot"]
