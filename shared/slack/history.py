@@ -10,7 +10,7 @@ from pydantic_ai.messages import (
     UserPromptPart,
 )
 
-from bot.message_parser import SlackMessageParser
+from shared.slack.message_parser import SlackMessageParser
 
 
 class SlackHistoryBuilder:

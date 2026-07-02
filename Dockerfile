@@ -7,16 +7,16 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 WORKDIR /app
 
 COPY pyproject.toml README.md ./
-COPY bot ./bot
-COPY agent.py config.py log.py main.py metrics.py ./
-COPY prompts ./prompts
+COPY shared ./shared
+COPY agents ./agents
 
 RUN pip install .
-
-ENV SYSTEM_PROMPT_PATH=/app/prompts/system.md
 
 # cria um usuário não-root e passa a rodar como ele
 RUN useradd --uid 10001 --create-home --shell /usr/sbin/nologin appuser
 USER 10001
 
-CMD ["slack-bot"]
+# Uma imagem, dois entrypoints. O deployment escolhe:
+#   command: ["qa-bot"]  ou  command: ["triage-bot"]
+# Os prompts viajam como package-data; SYSTEM_PROMPT_PATH pode sobrescrever.
+CMD ["qa-bot"]

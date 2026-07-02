@@ -1,11 +1,11 @@
 import logging
 from typing import Any
 
-from bot.history import SlackHistoryBuilder
-from bot.message_parser import SlackMessageParser
-from bot.slack_message_updater import SlackMessageUpdater
-from bot.types import AnswerFn
-from metrics import answer_errors_total, answer_latency, questions_total
+from shared.slack.history import SlackHistoryBuilder
+from shared.slack.message_parser import SlackMessageParser
+from shared.slack.message_updater import SlackMessageUpdater
+from shared.slack.types import AnswerFn
+from shared.metrics import answer_errors_total, answer_latency, questions_total
 
 
 class SlackResponder:
